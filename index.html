@@ -153,15 +153,36 @@ function renderHoje(){
   });
 }
 
+function getCurrentWeekDates(){
+  const now = new Date();
+  const dow = now.getDay(); // 0=Domingo .. 6=Sábado
+  const diffToMonday = dow === 0 ? -6 : 1 - dow;
+  const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMonday);
+  const dates = {};
+  DAYS.forEach((day, i) => {
+    const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
+    const dd = String(d.getDate()).padStart(2,"0");
+    const mm = String(d.getMonth()+1).padStart(2,"0");
+    dates[day] = `${dd}/${mm}/${d.getFullYear()}`;
+  });
+  return dates;
+}
+
 function renderWeek(){
   const grid = document.getElementById("weekGrid");
   grid.innerHTML = "";
   const today = currentDayName();
+  const weekDates = getCurrentWeekDates();
   DAYS.forEach(day=>{
     const col = document.createElement("div");
     col.className = "day-col" + (day===today ? " today" : "");
-    const blocks = (SCHEDULE[day]||[]).filter(profileBlockVisible).slice().sort((a,b)=>toMinutes(a.time.split(" - ")[0])-toMinutes(b.time.split(" - ")[0]));
-    col.innerHTML = `<h3>${day}</h3>` + (blocks.length
+    const dateStr = weekDates[day];
+    const [dd,mm] = dateStr.split("/");
+    const blocks = (SCHEDULE[day]||[])
+      .filter(b => profileBlockVisible(b) && (!b.dates || b.dates.includes(dateStr)))
+      .slice()
+      .sort((a,b)=>toMinutes(a.time.split(" - ")[0])-toMinutes(b.time.split(" - ")[0]));
+    col.innerHTML = `<h3>${day} · ${dd}/${mm}</h3>` + (blocks.length
       ? blocks.map(b=>`
           <div class="block">
             <div class="time">${b.time}</div>
