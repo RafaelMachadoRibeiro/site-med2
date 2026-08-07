@@ -1,9 +1,10 @@
 # Turma III · Medicina Multivix Serra
 
-Site estático (HTML/CSS/JS puro, sem build) para a turma do 2º período. Duas páginas:
+Site estático (HTML/CSS/JS puro, sem build) para a turma do 2º período. Três páginas:
 
-- **`index.html`** — Hoje (aulas do dia, com destaque pro que está rolando agora), semana completa, materiais por matéria (Drive + Atlas + Thea), calendário de provas e um painel pra cada aluno configurar seus grupos e dispensas.
+- **`index.html`** — Hoje (aulas do dia, com destaque pro que está rolando agora), semana completa, materiais por matéria (Drive + Atlas + Thea) e um painel pra cada aluno configurar seus grupos e dispensas.
 - **`calculadora.html`** — calculadora de notas (aprovação direta, recuperação, eixos teórico/prático, matérias de dependência, exportação em PDF).
+- **`provas.html`** — calendário de provas (bimestrais, substitutivas e finais), com marcação pessoal de dependência/recuperação e um calendário mês a mês pronto pra imprimir.
 
 As notas e as configurações de cada aluno ficam salvas só no navegador dele (localStorage) — não existe banco compartilhado.
 
@@ -12,8 +13,9 @@ As notas e as configurações de cada aluno ficam salvas só no navegador dele (
 ```
 index.html        → página inicial (não precisa mexer no dia a dia)
 calculadora.html   → página da calculadora (não precisa mexer no dia a dia)
+provas.html        → página do calendário de provas (não precisa mexer no dia a dia)
 style.css          → visual do site (tema escuro)
-data.js            → horário, materiais e Instagram — é o que você edita sempre
+data.js            → horário, materiais, provas e Instagram — é o que você edita sempre
 profile.js         → lógica do painel "meus grupos e dispensas"
 drive.js           → navegador de pastas do Drive embutido no site
 calculator.js      → lógica da calculadora de notas
@@ -96,15 +98,19 @@ Um array de objetos, um por avaliação:
 - `fase`: `"1º Bimestre"`, `"2º Bimestre"`, `"Substitutiva"` ou `"Final"` — usado nos filtros e na cor da etiqueta.
 - `time`: horário da prova.
 
-A tabela na seção "Calendário de provas" ordena por data automaticamente — só adicionar a linha em qualquer posição do array.
+A tabela em `provas.html` ordena por data automaticamente — só adicionar a linha em qualquer posição do array.
+
+**Marcação de dependência/recuperação:** em `provas.html`, cada aluno marca na coluna "Minha situação" se uma prova é Normal, Dependência ou Recuperação pra ele — fica salvo só no navegador dele (não mexe no `EXAMS`). Isso alimenta o calendário de impressão (ver abaixo).
+
+**Calendário para imprimir:** o card "🖨 Imprimir calendário" em `provas.html` monta um calendário mês a mês (só com as provas do filtro escolhido) e chama a impressão do navegador — o aluno escolhe "Salvar como PDF" na hora de imprimir. Os filtros são 1º Bimestre, 2º Bimestre (usam o campo `fase`), e Dependências/Recuperações (usam a marcação pessoal de cada aluno).
 
 ### 5. Instagram (`IG_URL`)
 
 ```js
-const IG_URL = "https://instagram.com/SEU_USUARIO_AQUI"; // TODO Rafael: troque pelo seu @
+const IG_URL = "https://instagram.com/rafaelm.md";
 ```
 
-Troque pela URL do seu Instagram (ex: `https://instagram.com/rafaelm.md`).
+Já está preenchido — só trocar aqui se mudar de usuário.
 
 ## Navegador de pastas do Drive embutido (`DRIVE_API_KEY`)
 

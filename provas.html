@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendário de provas · Turma III</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="site-nav">
+    <a href="index.html">Início</a>
+    <a href="calculadora.html">Calculadora</a>
+    <a href="provas.html" class="active">Provas</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow"><span class="dot"></span> MEDICINA · MULTIVIX SERRA · 2º PERÍODO · MED02IA</div>
+    <h1 class="title" style="font-size:clamp(30px,6vw,48px);">Calendário de provas</h1>
+    <p class="subtitle">Bimestrais, substitutivas e finais do 2º MED (2026/2). Marque abaixo o que for dependência ou recuperação sua — fica salvo só no seu navegador.</p>
+  </header>
+
+  <section id="provas" style="padding-top:32px;">
+    <div class="exams-filter" id="examsFilter"></div>
+    <div class="exams-table-wrap">
+      <table class="exams-table">
+        <thead>
+          <tr><th>Data</th><th>Matéria</th><th>Tipo</th><th>Horário</th><th>Fase</th><th>Minha situação</th></tr>
+        </thead>
+        <tbody id="examsBody"></tbody>
+      </table>
+    </div>
+
+    <div class="cal-print-card">
+      <h3>🖨 Imprimir calendário</h3>
+      <p>Gera um calendário (mês a mês) pronto pra imprimir ou salvar em PDF, só com as provas do filtro escolhido.
+      "Dependências" e "Recuperações" usam o que você marcou na coluna "Minha situação" acima.</p>
+      <div class="cal-print-buttons">
+        <button class="cal-print-btn" onclick="printExamCalendar('1b')">1º Bimestre</button>
+        <button class="cal-print-btn" onclick="printExamCalendar('2b')">2º Bimestre</button>
+        <button class="cal-print-btn" onclick="printExamCalendar('dependencia')">Dependências</button>
+        <button class="cal-print-btn" onclick="printExamCalendar('recuperacao')">Recuperações</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="credit">Site criado por <a href="#" id="creditName">Rafael Machado ∴</a></div>
+    <a class="ig" id="igLink" href="#" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+      Instagram
+    </a>
+  </footer>
+</div>
+
+<div class="exam-calendar-print" id="examCalendarPrint">
+  <div class="cal-print-title">MEDICINA · MULTIVIX SERRA · TURMA III</div>
+  <h1 id="calPrintTitle" style="font-family:'Space Grotesk',sans-serif; font-size:20px; margin-bottom:16px; color:#111827;"></h1>
+  <div id="calPrintBody"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+/* ======= CALENDÁRIO DE PROVAS ======= */
+function examDateToSortable(d){
+  const [dd,mm,yyyy] = d.split("/");
+  return `${yyyy}${mm}${dd}`;
+}
+
+function examFaseClass(fase){
+  if(fase === "Substitutiva") return "substitutiva";
+  if(fase === "Final") return "final";
+  return "bimestre";
+}
+
+function examId(e){
+  return `${e.date}|${e.subj}|${e.tipo}`;
+}
+
+const EXAM_STATUS_KEY = "turma3_exam_status_v1";
+
+function examStatusLoad(){
+  return JSON.parse(localStorage.getItem(EXAM_STATUS_KEY)) || {};
+}
+function examStatusSave(map){
+  localStorage.setItem(EXAM_STATUS_KEY, JSON.stringify(map));
+}
+function examStatusGet(id){
+  return examStatusLoad()[id] || "normal";
+}
+function examStatusOnChange(select, id){
+  const map = examStatusLoad();
+  if(select.value === "normal") delete map[id];
+  else map[id] = select.value;
+  examStatusSave(map);
+  select.className = "exam-status-select" + (select.value !== "normal" ? " " + select.value : "");
+}
+
+let examsFilterFase = "Todas";
+
+function renderExamsFilter(){
+  const fases = ["Todas", "1º Bimestre", "2º Bimestre", "Substitutiva", "Final"];
+  const el = document.getElementById("examsFilter");
+  el.innerHTML = fases.map(f =>
+    `<button class="${f===examsFilterFase?"active":""}" onclick="setExamsFilter('${f}')">${f}</button>`
+  ).join("");
+}
+
+function setExamsFilter(fase){
+  examsFilterFase = fase;
+  renderExamsFilter();
+  renderExams();
+}
+
+function renderExams(){
+  const body = document.getElementById("examsBody");
+  const sorted = EXAMS.slice().sort((a,b)=> examDateToSortable(a.date).localeCompare(examDateToSortable(b.date)));
+  const filtered = examsFilterFase === "Todas" ? sorted : sorted.filter(e => e.fase === examsFilterFase);
+  body.innerHTML = filtered.map(e => {
+    const id = examId(e);
+    const status = examStatusGet(id);
+    return `
+    <tr>
+      <td class="exam-date">${e.date}</td>
+      <td>${e.subj}</td>
+      <td>${e.tipo}</td>
+      <td>${e.time}</td>
+      <td><span class="exam-fase ${examFaseClass(e.fase)}">${e.fase}</span></td>
+      <td>
+        <select class="exam-status-select${status!=='normal' ? ' '+status : ''}" onchange="examStatusOnChange(this, '${id.replace(/'/g,"\\'")}')">
+          <option value="normal" ${status==='normal'?'selected':''}>Normal</option>
+          <option value="dependencia" ${status==='dependencia'?'selected':''}>Dependência</option>
+          <option value="recuperacao" ${status==='recuperacao'?'selected':''}>Recuperação</option>
+        </select>
+      </td>
+    </tr>
+  `;
+  }).join("");
+}
+
+/* ======= CALENDÁRIO PARA IMPRESSÃO ======= */
+const CAL_MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const CAL_DOW = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+
+function buildCalendarHTML(exams){
+  const byMonth = {};
+  exams.forEach(e=>{
+    const [dd,mm,yyyy] = e.date.split("/");
+    const key = `${yyyy}-${mm}`;
+    (byMonth[key] = byMonth[key] || []).push(e);
+  });
+  const monthKeys = Object.keys(byMonth).sort();
+
+  return monthKeys.map(key=>{
+    const [yyyy,mm] = key.split("-").map(Number);
+    const monthIndex = mm - 1;
+    const firstDow = new Date(yyyy, monthIndex, 1).getDay();
+    const daysInMonth = new Date(yyyy, monthIndex+1, 0).getDate();
+
+    const examsByDay = {};
+    byMonth[key].forEach(e=>{
+      const day = Number(e.date.split("/")[0]);
+      (examsByDay[day] = examsByDay[day] || []).push(e);
+    });
+
+    let cells = "";
+    for(let i=0;i<firstDow;i++) cells += `<div class="cal-day empty"></div>`;
+    for(let d=1; d<=daysInMonth; d++){
+      const dayExams = examsByDay[d] || [];
+      cells += `<div class="cal-day">
+        <span class="cal-daynum">${d}</span>
+        ${dayExams.map(e=>`<div class="cal-exam">${e.subj}<br>${e.tipo}<br>${e.time}</div>`).join("")}
+      </div>`;
+    }
+    const totalCells = firstDow + daysInMonth;
+    const trailing = (7 - (totalCells % 7)) % 7;
+    for(let i=0;i<trailing;i++) cells += `<div class="cal-day empty"></div>`;
+
+    return `
+      <div class="cal-month">
+        <h2>${CAL_MESES[monthIndex]} ${yyyy}</h2>
+        <div class="cal-grid">
+          ${CAL_DOW.map(d=>`<div class="cal-dow">${d}</div>`).join("")}
+          ${cells}
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function printExamCalendar(mode){
+  const statusMap = examStatusLoad();
+  let exams;
+  let title;
+
+  if(mode === "1b"){ exams = EXAMS.filter(e=>e.fase==="1º Bimestre"); title = "1º Bimestre"; }
+  else if(mode === "2b"){ exams = EXAMS.filter(e=>e.fase==="2º Bimestre"); title = "2º Bimestre"; }
+  else if(mode === "dependencia"){ exams = EXAMS.filter(e=> statusMap[examId(e)]==="dependencia"); title = "Dependências"; }
+  else if(mode === "recuperacao"){ exams = EXAMS.filter(e=> statusMap[examId(e)]==="recuperacao"); title = "Recuperações"; }
+
+  document.getElementById("calPrintTitle").textContent = `Calendário de Provas — ${title}`;
+
+  if(exams.length === 0){
+    document.getElementById("calPrintBody").innerHTML = `<p style="padding:16px 0; color:#6b7280;">Nenhuma prova marcada como "${title}" ainda.</p>`;
+  } else {
+    const sorted = exams.slice().sort((a,b)=> examDateToSortable(a.date).localeCompare(examDateToSortable(b.date)));
+    document.getElementById("calPrintBody").innerHTML = buildCalendarHTML(sorted);
+  }
+  window.print();
+}
+
+document.getElementById("igLink").href = IG_URL;
+document.getElementById("creditName").href = IG_URL;
+
+renderExamsFilter();
+renderExams();
+</script>
+</body>
+</html>

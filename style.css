@@ -254,6 +254,42 @@ section{padding:44px 0;}
 .exams-table .exam-fase.bimestre{color:var(--trace); border-color:var(--trace-dim);}
 .exams-table .exam-fase.substitutiva{color:var(--amber); border-color:rgba(242,166,90,.35);}
 .exams-table .exam-fase.final{color:var(--danger); border-color:rgba(224,87,76,.4);}
+.exam-status-select{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; background:var(--panel-2); color:var(--muted);
+  border:1px solid var(--hair); border-radius:8px; padding:6px 8px; cursor:pointer;
+}
+.exam-status-select:focus{outline:none; border-color:var(--trace);}
+.exam-status-select.dependencia{color:var(--amber); border-color:rgba(242,166,90,.4);}
+.exam-status-select.recuperacao{color:var(--danger); border-color:rgba(224,87,76,.4);}
+
+.cal-print-card{
+  background:var(--panel); border:1px solid var(--hair); border-radius:var(--radius);
+  padding:20px 22px; margin-top:24px;
+}
+.cal-print-card h3{font-size:15px; margin-bottom:6px;}
+.cal-print-card p{color:var(--muted); font-size:13px; margin-bottom:16px; line-height:1.6;}
+.cal-print-buttons{display:flex; flex-wrap:wrap; gap:10px;}
+.cal-print-btn{
+  font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:500;
+  background:var(--panel-2); color:var(--trace); border:1px solid var(--trace-dim);
+  padding:11px 18px; border-radius:10px; cursor:pointer;
+}
+.cal-print-btn:hover{border-color:var(--trace);}
+
+.exam-calendar-print{display:none;}
+@media print{
+  .exam-calendar-print{display:block !important;}
+  .cal-month{page-break-after:always;}
+  .cal-month:last-child{page-break-after:auto;}
+  .cal-month h2{font-size:16px; margin-bottom:8px; color:#111827; font-family:'Space Grotesk',sans-serif;}
+  .cal-print-title{font-size:11px; font-weight:800; letter-spacing:1.2px; color:#0a58ca; margin-bottom:2px;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:#d7dde5; border:1px solid #d7dde5;}
+  .cal-dow{text-align:center; font-weight:700; padding:5px; background:#0a58ca; color:#fff; font-size:9px; text-transform:uppercase; letter-spacing:.3px;}
+  .cal-day{min-height:76px; background:#fff; padding:4px; font-size:8px; color:#111827;}
+  .cal-day.empty{background:#f8fafc;}
+  .cal-daynum{font-weight:700; font-size:10.5px; color:#111827;}
+  .cal-exam{margin-top:3px; padding:2px 3px; background:#eef2ff; border-radius:3px; font-size:7.3px; line-height:1.25; color:#1e3a8a;}
+}
 
 /* ---------- DRIVE MODAL (navegador de pastas embutido) ---------- */
 .drive-modal{display:none; position:fixed; inset:0; background:rgba(4,8,6,.72); z-index:100; align-items:center; justify-content:center; padding:20px;}
@@ -364,7 +400,7 @@ section{padding:44px 0;}
   @page{ size:A4 landscape; margin:16mm; }
   *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
   body{ background:#fff; color:#111827; }
-  header, .site-nav, .now-chip, .ecg-line, #hoje, #semana, .pulse-divider, #materias, #provas, .calc-rules-card, .calc-toolbar, .calc-subjects, .calc-dep-card, footer{
+  header, .site-nav, .now-chip, .ecg-line, #hoje, #semana, .pulse-divider, #materias, #provas, .calc-rules-card, .calc-toolbar, .calc-subjects, .calc-dep-card, .exams-filter, .exams-table-wrap, .cal-print-card, footer{
     display:none !important;
   }
   .wrap{max-width:100%; padding:0;}

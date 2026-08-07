@@ -16,6 +16,7 @@
   <nav class="site-nav">
     <a href="index.html" class="active">Início</a>
     <a href="calculadora.html">Calculadora</a>
+    <a href="provas.html">Provas</a>
   </nav>
 
   <header>
@@ -71,27 +72,6 @@
       <span class="tag">Slides · Resumos · Anotações · Atlas · Thea</span>
     </div>
     <div class="subject-grid" id="subjectGrid"></div>
-  </section>
-
-  <svg class="pulse-divider" viewBox="0 0 1040 40" preserveAspectRatio="none">
-    <path d="M0,20 L1040,20"/>
-    <path class="beat" d="M460,20 L480,20 L490,4 L500,34 L510,20 L580,20"/>
-  </svg>
-
-  <section id="provas">
-    <div class="section-head">
-      <h2>Calendário de provas</h2>
-      <span class="tag">2º MED · 2026/2</span>
-    </div>
-    <div class="exams-filter" id="examsFilter"></div>
-    <div class="exams-table-wrap">
-      <table class="exams-table">
-        <thead>
-          <tr><th>Data</th><th>Matéria</th><th>Tipo</th><th>Horário</th><th>Fase</th></tr>
-        </thead>
-        <tbody id="examsBody"></tbody>
-      </table>
-    </div>
   </section>
 
   <footer>
@@ -223,49 +203,6 @@ function renderSubjects(){
   });
 }
 
-/* ======= CALENDÁRIO DE PROVAS ======= */
-function examDateToSortable(d){
-  const [dd,mm,yyyy] = d.split("/");
-  return `${yyyy}${mm}${dd}`;
-}
-
-function examFaseClass(fase){
-  if(fase === "Substitutiva") return "substitutiva";
-  if(fase === "Final") return "final";
-  return "bimestre";
-}
-
-let examsFilterFase = "Todas";
-
-function renderExamsFilter(){
-  const fases = ["Todas", "1º Bimestre", "2º Bimestre", "Substitutiva", "Final"];
-  const el = document.getElementById("examsFilter");
-  el.innerHTML = fases.map(f =>
-    `<button class="${f===examsFilterFase?"active":""}" onclick="setExamsFilter('${f}')">${f}</button>`
-  ).join("");
-}
-
-function setExamsFilter(fase){
-  examsFilterFase = fase;
-  renderExamsFilter();
-  renderExams();
-}
-
-function renderExams(){
-  const body = document.getElementById("examsBody");
-  const sorted = EXAMS.slice().sort((a,b)=> examDateToSortable(a.date).localeCompare(examDateToSortable(b.date)));
-  const filtered = examsFilterFase === "Todas" ? sorted : sorted.filter(e => e.fase === examsFilterFase);
-  body.innerHTML = filtered.map(e => `
-    <tr>
-      <td class="exam-date">${e.date}</td>
-      <td>${e.subj}</td>
-      <td>${e.tipo}</td>
-      <td>${e.time}</td>
-      <td><span class="exam-fase ${examFaseClass(e.fase)}">${e.fase}</span></td>
-    </tr>
-  `).join("");
-}
-
 document.getElementById("igLink").href = IG_URL;
 document.getElementById("creditName").href = IG_URL;
 
@@ -273,8 +210,6 @@ renderNowChip();
 renderHoje();
 renderWeek();
 renderSubjects();
-renderExamsFilter();
-renderExams();
 setInterval(()=>{ renderNowChip(); renderHoje(); }, 60000);
 </script>
 </body>
