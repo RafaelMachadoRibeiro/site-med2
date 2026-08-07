@@ -1,0 +1,6 @@
+# Cópia local não relacionada a este repositório
+calculadora-multivix-local/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
