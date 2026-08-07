@@ -213,6 +213,7 @@ function calcRenderSubjects() {
       <div class="calc-subject-body">
         ${bodyHTML}
       </div>
+      <div id="calc-final-note-${index}"></div>
     `;
     container.appendChild(card);
 
@@ -270,6 +271,49 @@ function calcGetInputValue(id) {
 
 function calcFormatSubjectName(name) {
   return name.replace(" - MED02IA", "");
+}
+
+/* ======= INTEGRAÇÃO COM O CALENDÁRIO DE PROVAS (Recuperação Final) ======= */
+const CALC_EXAM_STATUS_KEY = "turma3_exam_status_v1";
+
+function calcExamId(e) {
+  return `${e.date}|${e.subj}|${e.tipo}`;
+}
+
+function calcIsPraticaTipo(tipo) {
+  return /prát|osce/i.test(tipo);
+}
+
+function calcSyncFinalExam(subjName, tipoPredicate, precisa) {
+  if (typeof EXAMS === "undefined") return;
+  const entry = EXAMS.find(e => e.fase === "Final" && e.subj === subjName && tipoPredicate(e.tipo));
+  if (!entry) return;
+  const map = JSON.parse(localStorage.getItem(CALC_EXAM_STATUS_KEY)) || {};
+  const id = calcExamId(entry);
+  if (precisa) map[id] = true; else delete map[id];
+  localStorage.setItem(CALC_EXAM_STATUS_KEY, JSON.stringify(map));
+}
+
+function calcRenderFinalNote(index, subject, statusText) {
+  const noteEl = document.getElementById(`calc-final-note-${index}`);
+  if (!noteEl) return;
+
+  const resolved = statusText === "Aprovado" || statusText === "Reprovado" || statusText.includes("Recuperação");
+  if (!resolved) { noteEl.innerHTML = ""; return; }
+
+  if (statusText === "Aprovado") {
+    noteEl.innerHTML = `<div class="calc-final-note ok">✓ Não precisa de Recuperação Final</div>`;
+    return;
+  }
+  if (statusText === "Reprovado") {
+    noteEl.innerHTML = `<div class="calc-final-note bad">⚠ Reprovado direto nessa simulação — fale com a coordenação</div>`;
+    return;
+  }
+
+  const subjName = calcFormatSubjectName(subject.name);
+  const finalExams = (typeof EXAMS !== "undefined") ? EXAMS.filter(e => e.fase === "Final" && e.subj === subjName) : [];
+  const dateInfo = finalExams.length ? ` · ${finalExams.map(e => `${e.date} (${e.tipo})`).join(" e ")}` : "";
+  noteEl.innerHTML = `<div class="calc-final-note warn">📌 Vai precisar da Recuperação Final${dateInfo} — <a href="provas.html">ver no calendário de provas</a></div>`;
 }
 
 function calcGetStatusClass(status) {
@@ -501,6 +545,9 @@ function calcCalculateAll() {
         statusGlobalEl.className = "calc-status-badge";
         combinedEl.textContent = "";
       }
+
+      if (resTeo.activeSimulation) calcSyncFinalExam(calcFormatSubjectName(subject.name), t => !calcIsPraticaTipo(t), !resTeo.approved);
+      if (resPrac.activeSimulation) calcSyncFinalExam(calcFormatSubjectName(subject.name), calcIsPraticaTipo, !resPrac.approved);
     } else {
       if (!isNaN(b1TeoFinal)) {
         if (resTeo.approved) {
@@ -521,7 +568,11 @@ function calcCalculateAll() {
         statusGlobalEl.textContent = "A avaliar";
         statusGlobalEl.className = "calc-status-badge";
       }
+
+      if (resTeo.activeSimulation) calcSyncFinalExam(calcFormatSubjectName(subject.name), () => true, !resTeo.approved);
     }
+
+    calcRenderFinalNote(index, subject, statusGlobalEl.textContent);
   });
 }
 
