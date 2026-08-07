@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Turma II · Medicina Multivix Serra</title>
+<title>Turma III · Medicina Multivix Serra</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -19,9 +20,19 @@
 
   <header>
     <div class="now-chip mono" id="nowChip">carregando…</div>
-    <div class="eyebrow"><span class="dot"></span> MEDICINA · MULTIVIX SERRA · 2º PERÍODO · 2026/2</div>
-    <h1 class="title">Turma II</h1>
-    <p class="subtitle">Horário da semana, materiais de cada matéria e cálculo de notas — tudo num só lugar.</p>
+    <div class="eyebrow">
+      <span class="dot"></span> MEDICINA · MULTIVIX SERRA · 2º PERÍODO · 2026/2
+      <span class="heartbeat" title="Turma III">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.87-10.5-9.5C-0.3 7.5 1.8 3 6 3c2.2 0 3.8 1.2 6 4 2.2-2.8 3.8-4 6-4 4.2 0 6.3 4.5 4.5 8.5C19.5 16.13 12 21 12 21z"/></svg>
+      </span>
+    </div>
+    <h1 class="title">Turma III</h1>
+    <p class="subtitle">Horário da semana, materiais de cada matéria, calendário de provas e cálculo de notas — tudo num só lugar.</p>
+    <div class="manifesto">
+      Criei esse site para a nossa turma para mostrar, na prática, que compartilhando conhecimento e nos
+      ajudando uns aos outros, a gente chega mais longe. <strong>Devemos nos exigir para sermos os melhores,
+      sem nunca nos desunirmos</strong> — porque a nossa classe, a classe médica, é a mais unida do Brasil.
+    </div>
     <svg class="ecg-line" viewBox="0 0 800 46" preserveAspectRatio="none">
       <path d="M0,23 L120,23 L145,23 L160,4 L178,42 L196,12 L214,23 L340,23 L365,23 L380,8 L398,38 L416,15 L434,23 L560,23 L585,23 L600,4 L618,42 L636,12 L654,23 L800,23"/>
     </svg>
@@ -57,9 +68,30 @@
   <section id="materias">
     <div class="section-head">
       <h2>Materiais por matéria</h2>
-      <span class="tag">Slides · Resumos · Transcrições · Atlas · Thea</span>
+      <span class="tag">Slides · Resumos · Anotações · Atlas · Thea</span>
     </div>
     <div class="subject-grid" id="subjectGrid"></div>
+  </section>
+
+  <svg class="pulse-divider" viewBox="0 0 1040 40" preserveAspectRatio="none">
+    <path d="M0,20 L1040,20"/>
+    <path class="beat" d="M460,20 L480,20 L490,4 L500,34 L510,20 L580,20"/>
+  </svg>
+
+  <section id="provas">
+    <div class="section-head">
+      <h2>Calendário de provas</h2>
+      <span class="tag">2º MED · 2026/2</span>
+    </div>
+    <div class="exams-filter" id="examsFilter"></div>
+    <div class="exams-table-wrap">
+      <table class="exams-table">
+        <thead>
+          <tr><th>Data</th><th>Matéria</th><th>Tipo</th><th>Horário</th><th>Fase</th></tr>
+        </thead>
+        <tbody id="examsBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <footer>
@@ -86,7 +118,7 @@
 <script src="profile.js"></script>
 <script src="drive.js"></script>
 <script>
-/* ======= LÓGICA DO SITE (hoje / semana / materiais) ======= */
+/* ======= LÓGICA DO SITE (hoje / semana / materiais / provas) ======= */
 function toMinutes(t){ const [h,m]=t.split(":").map(Number); return h*60+m; }
 
 function renderNowChip(){
@@ -122,7 +154,7 @@ function renderHoje(){
     return;
   }
   label.textContent = today;
-  const blocks = (SCHEDULE[today] || []).filter(profileBlockVisible);
+  const blocks = (SCHEDULE[today] || []).filter(b => profileBlockVisible(b) && profileBlockIsToday(b));
   if(blocks.length === 0){
     scroll.innerHTML = `<p class="empty-note">Sem aula hoje (ou tudo dispensado/fora do seu grupo).</p>`;
     return;
@@ -170,22 +202,68 @@ function renderSubjects(){
 
     let pills = "";
     Object.entries(s.links).forEach(([label,url])=>{
-      pills += `<span class="pill" onclick="driveOpenModal('${url}', '${(s.name + " · " + label).replace(/'/g, "\\'")}')">${label}</span>`;
+      pills += url
+        ? `<span class="pill" onclick="driveOpenModal('${url}', '${(s.name + " · " + label).replace(/'/g, "\\'")}')">${label}</span>`
+        : `<span class="pill disabled">${label} · em breve</span>`;
     });
-    pills += s.atlas
-      ? `<a class="pill" href="${s.atlas}" target="_blank" rel="noopener">Atlas</a>`
-      : `<span class="pill disabled">Atlas · em breve</span>`;
+    if(s.hasOwnProperty("atlas")){
+      pills += s.atlas
+        ? `<a class="pill" href="${s.atlas}" target="_blank" rel="noopener">Atlas</a>`
+        : `<span class="pill disabled">Atlas · em breve</span>`;
+    }
     pills += s.thea
       ? `<a class="pill" href="${s.thea}" target="_blank" rel="noopener">Thea</a>`
       : `<span class="pill disabled">Thea · em breve</span>`;
 
     card.innerHTML = `
       <h3>${s.name}</h3>
-      ${s.folder ? `<button class="folder-link" onclick="driveOpenModal('${s.folder}', '${s.name.replace(/'/g, "\\'")}')">ABRIR PASTA COMPLETA →</button>` : `<span class="folder-link" style="color:var(--muted); cursor:default;">PASTA AINDA NÃO CRIADA</span>`}
       <div class="pill-row">${pills}</div>
     `;
     grid.appendChild(card);
   });
+}
+
+/* ======= CALENDÁRIO DE PROVAS ======= */
+function examDateToSortable(d){
+  const [dd,mm,yyyy] = d.split("/");
+  return `${yyyy}${mm}${dd}`;
+}
+
+function examFaseClass(fase){
+  if(fase === "Substitutiva") return "substitutiva";
+  if(fase === "Final") return "final";
+  return "bimestre";
+}
+
+let examsFilterFase = "Todas";
+
+function renderExamsFilter(){
+  const fases = ["Todas", "1º Bimestre", "2º Bimestre", "Substitutiva", "Final"];
+  const el = document.getElementById("examsFilter");
+  el.innerHTML = fases.map(f =>
+    `<button class="${f===examsFilterFase?"active":""}" onclick="setExamsFilter('${f}')">${f}</button>`
+  ).join("");
+}
+
+function setExamsFilter(fase){
+  examsFilterFase = fase;
+  renderExamsFilter();
+  renderExams();
+}
+
+function renderExams(){
+  const body = document.getElementById("examsBody");
+  const sorted = EXAMS.slice().sort((a,b)=> examDateToSortable(a.date).localeCompare(examDateToSortable(b.date)));
+  const filtered = examsFilterFase === "Todas" ? sorted : sorted.filter(e => e.fase === examsFilterFase);
+  body.innerHTML = filtered.map(e => `
+    <tr>
+      <td class="exam-date">${e.date}</td>
+      <td>${e.subj}</td>
+      <td>${e.tipo}</td>
+      <td>${e.time}</td>
+      <td><span class="exam-fase ${examFaseClass(e.fase)}">${e.fase}</span></td>
+    </tr>
+  `).join("");
 }
 
 document.getElementById("igLink").href = IG_URL;
@@ -195,6 +273,8 @@ renderNowChip();
 renderHoje();
 renderWeek();
 renderSubjects();
+renderExamsFilter();
+renderExams();
 setInterval(()=>{ renderNowChip(); renderHoje(); }, 60000);
 </script>
 </body>

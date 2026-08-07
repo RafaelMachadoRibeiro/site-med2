@@ -34,6 +34,18 @@ function profileBlockVisible(block) {
   return true;
 }
 
+function profileTodayDateStr() {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, "0");
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  return `${dd}/${mm}/${now.getFullYear()}`;
+}
+
+function profileBlockIsToday(block) {
+  if (!block.dates) return true;
+  return block.dates.includes(profileTodayDateStr());
+}
+
 function profileRenderPanel() {
   const body = document.getElementById("profilePanelBody");
   if (!body) return;

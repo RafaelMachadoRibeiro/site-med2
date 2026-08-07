@@ -1,8 +1,8 @@
-# Turma II · Medicina Multivix Serra
+# Turma III · Medicina Multivix Serra
 
 Site estático (HTML/CSS/JS puro, sem build) para a turma do 2º período. Duas páginas:
 
-- **`index.html`** — Hoje (aulas do dia, com destaque pro que está rolando agora), semana completa, materiais por matéria (Drive + Atlas + Thea) e um painel pra cada aluno configurar seus grupos e dispensas.
+- **`index.html`** — Hoje (aulas do dia, com destaque pro que está rolando agora), semana completa, materiais por matéria (Drive + Atlas + Thea), calendário de provas e um painel pra cada aluno configurar seus grupos e dispensas.
 - **`calculadora.html`** — calculadora de notas (aprovação direta, recuperação, eixos teórico/prático, matérias de dependência, exportação em PDF).
 
 As notas e as configurações de cada aluno ficam salvas só no navegador dele (localStorage) — não existe banco compartilhado.
@@ -38,6 +38,7 @@ Um objeto com um array por dia da semana. Cada aula é `{time, subj, meta, group
 - `subj`: nome da matéria/atividade. Precisa ser **igual** em todas as aulas da mesma matéria (teórica e prática), pois é isso que agrupa/filtra por dispensa.
 - `meta`: linha secundária (tipo de aula, grupo, sala, professor etc).
 - `group` (opcional): array com o(s) número(s) de grupo que têm essa aula (ex: `[1]`, ou `[3,4]` quando dois grupos assistem juntos). Só use em aulas que variam por grupo — aulas "Todos" não precisam desse campo. Se usar `group`, cadastre as opções em `GROUP_OPTIONS` (ver abaixo) pra aparecer no painel do aluno.
+- `dates` (opcional): array de datas exatas `"DD/MM/AAAA"` em que essa aula específica acontece (ex: práticas de APS II e Casos Clínicos II, que se revezam por grupo em semanas alternadas). Quando presente, a aula só aparece em **"Hoje"** nessas datas exatas — na "Semana completa" ela continua aparecendo normalmente no dia da semana correspondente, como referência geral. Sem esse campo, a aula é tratada como toda semana.
 
 Para um dia sem aula, deixe o array vazio: `"Sexta": [],`
 
@@ -64,23 +65,40 @@ Um array de objetos, um por matéria:
 ```js
 {
   name:"Anatomia II",
-  folder:"https://drive.google.com/drive/folders/...",   // pasta completa no Drive
   links:{
     "Slides":"https://drive.google.com/drive/folders/...",
     "Resumo":"https://drive.google.com/drive/folders/...",
+    "Provas antigas": null,   // troque por um link quando organizar a pasta
   },
-  atlas: null,   // troque por um link quando tiver, ex: "https://..."
+  atlas: null,   // só existe em Anatomia II e Histologia II — troque por um link quando tiver
   thea:  "https://www.thea.study/classes/.../copy?signature=...",
 },
 ```
 
-- `folder`: pasta "mãe" da matéria no Drive. Se ainda não existe, deixe `null`.
-- `links`: adicione quantos pares `"Rótulo": "URL do Drive"` quiser — cada um vira um botão (pill) que abre a pasta dentro do site.
-- `atlas` e `thea`: enquanto estiverem `null`, o site mostra "em breve" desabilitado. Assim que tiver o link, troque `null` por `"https://..."` (com aspas). Esses dois **sempre abrem em nova aba** (não são pastas do Drive, então não passam pelo navegador embutido).
+- `links`: adicione quantos pares `"Rótulo": "URL do Drive"` quiser — cada um vira um botão (pill) que abre a pasta dentro do site. Um valor `null` aparece como "em breve" desabilitado — troque por `"https://..."` quando tiver o link.
+- **Provas antigas**: toda matéria (exceto Embriologia II, que não tem prova antiga) já tem esse item em `links` como `null`. Organize uma subpasta com as provas antigas dentro da pasta da matéria no Drive e cole o link dela aqui.
+- `atlas`: só existe no objeto de **Anatomia II** e **Histologia II** — nas outras matérias nem inclua esse campo (assim o botão não aparece). Enquanto for `null`, mostra "em breve".
+- `thea`: enquanto for `null`, mostra "em breve"; sempre abre em nova aba (não é pasta do Drive, não passa pelo navegador embutido).
 
 Para adicionar uma matéria nova, copie um bloco `{ ... }` inteiro, cole antes do `];` final e ajuste os campos.
 
-### 4. Instagram (`IG_URL`)
+### 4. Calendário de provas (`EXAMS`)
+
+Um array de objetos, um por avaliação:
+
+```js
+{date:"19/09/2026", subj:"Anatomia II", tipo:"Cognitiva (AC)", fase:"1º Bimestre", time:"08:00 - 10:00"},
+```
+
+- `date`: formato `"DD/MM/AAAA"`.
+- `subj`: nome da matéria (aparece como texto simples, não precisa bater com `SCHEDULE`).
+- `tipo`: ex. `"Cognitiva (AC)"`, `"Prática (Habilidades)"`, `"Prática (OSCE)"`.
+- `fase`: `"1º Bimestre"`, `"2º Bimestre"`, `"Substitutiva"` ou `"Final"` — usado nos filtros e na cor da etiqueta.
+- `time`: horário da prova.
+
+A tabela na seção "Calendário de provas" ordena por data automaticamente — só adicionar a linha em qualquer posição do array.
+
+### 5. Instagram (`IG_URL`)
 
 ```js
 const IG_URL = "https://instagram.com/SEU_USUARIO_AQUI"; // TODO Rafael: troque pelo seu @
@@ -90,7 +108,7 @@ Troque pela URL do seu Instagram (ex: `https://instagram.com/rafaelm.md`).
 
 ## Navegador de pastas do Drive embutido (`DRIVE_API_KEY`)
 
-Os botões de pasta ("Slides", "Resumo", "ABRIR PASTA COMPLETA" etc.) abrem um navegador de arquivos **dentro do próprio site** — sem mostrar a interface do Drive — e o clique num arquivo baixa ele direto. Como busca sempre ao vivo na API, fica automaticamente sincronizado com o que está na pasta do Drive (adicionou um arquivo lá, já aparece no site).
+Os botões de pasta ("Slides", "Resumo", "Provas antigas" etc.) abrem um navegador de arquivos **dentro do próprio site** — sem mostrar a interface do Drive — e o clique num arquivo baixa ele direto. Como busca sempre ao vivo na API, fica automaticamente sincronizado com o que está na pasta do Drive (adicionou um arquivo lá, já aparece no site).
 
 Isso depende de uma chave de API do Google Drive, gratuita e só leitura:
 

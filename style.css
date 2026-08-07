@@ -6,6 +6,7 @@
   --trace-dim:#2C8B63;
   --amber:#F2A65A;
   --danger:#E0574C;
+  --heart-red:#E4032E;
   --paper:#E7ECE9;
   --muted:#7C8C86;
   --hair:#22322C;
@@ -61,6 +62,34 @@ header{
   animation:pulseDot 1.8s ease-in-out infinite;
 }
 @keyframes pulseDot{0%,100%{opacity:1} 50%{opacity:.25}}
+.heartbeat{
+  display:inline-block;
+  color:var(--heart-red);
+  animation: heartbeat 1.15s ease-in-out infinite;
+  transform-origin:center;
+}
+.heartbeat svg{display:block;}
+@keyframes heartbeat{
+  0%, 100%{transform:scale(1);}
+  15%{transform:scale(1.28);}
+  30%{transform:scale(1);}
+  45%{transform:scale(1.18);}
+  60%{transform:scale(1);}
+}
+
+.manifesto{
+  margin-top:22px;
+  padding:16px 20px;
+  background:var(--panel);
+  border:1px solid var(--hair);
+  border-left:3px solid var(--heart-red);
+  border-radius:10px;
+  color:var(--muted);
+  font-size:13.5px;
+  line-height:1.7;
+  max-width:640px;
+}
+.manifesto strong{color:var(--paper);}
 h1.title{
   font-size:clamp(38px,7vw,64px);
   font-weight:700;
@@ -200,6 +229,32 @@ section{padding:44px 0;}
 .pill:hover{border-color:var(--trace);}
 .pill.disabled{color:var(--muted); border-style:dashed; cursor:default; pointer-events:none;}
 
+/* ---------- CALENDÁRIO DE PROVAS ---------- */
+.exams-filter{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+.exams-filter button{
+  font-family:'IBM Plex Mono',monospace; font-size:11.5px; padding:7px 13px;
+  border:1px solid var(--hair); border-radius:999px; background:var(--panel-2); color:var(--muted); cursor:pointer;
+}
+.exams-filter button.active{color:var(--trace); border-color:var(--trace-dim); background:rgba(76,224,160,0.08);}
+.exams-filter button:hover{border-color:var(--trace);}
+.exams-table-wrap{overflow-x:auto; border:1px solid var(--hair); border-radius:var(--radius);}
+.exams-table{width:100%; border-collapse:collapse; font-size:13px; min-width:560px;}
+.exams-table th{
+  text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--muted); padding:12px 14px; border-bottom:1px solid var(--hair); background:var(--panel);
+}
+.exams-table td{padding:11px 14px; border-bottom:1px solid var(--hair); color:var(--paper);}
+.exams-table tr:last-child td{border-bottom:none;}
+.exams-table tr:hover td{background:var(--panel-2);}
+.exams-table .exam-date{font-family:'IBM Plex Mono',monospace; color:var(--trace); white-space:nowrap;}
+.exams-table .exam-fase{
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em;
+  padding:3px 9px; border-radius:999px; border:1px solid var(--hair); color:var(--muted); white-space:nowrap;
+}
+.exams-table .exam-fase.bimestre{color:var(--trace); border-color:var(--trace-dim);}
+.exams-table .exam-fase.substitutiva{color:var(--amber); border-color:rgba(242,166,90,.35);}
+.exams-table .exam-fase.final{color:var(--danger); border-color:rgba(224,87,76,.4);}
+
 /* ---------- DRIVE MODAL (navegador de pastas embutido) ---------- */
 .drive-modal{display:none; position:fixed; inset:0; background:rgba(4,8,6,.72); z-index:100; align-items:center; justify-content:center; padding:20px;}
 .drive-modal.open{display:flex;}
@@ -309,7 +364,7 @@ section{padding:44px 0;}
   @page{ size:A4 landscape; margin:16mm; }
   *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
   body{ background:#fff; color:#111827; }
-  header, .site-nav, .now-chip, .ecg-line, #hoje, #semana, .pulse-divider, #materias, .calc-rules-card, .calc-toolbar, .calc-subjects, .calc-dep-card, footer{
+  header, .site-nav, .now-chip, .ecg-line, #hoje, #semana, .pulse-divider, #materias, #provas, .calc-rules-card, .calc-toolbar, .calc-subjects, .calc-dep-card, footer{
     display:none !important;
   }
   .wrap{max-width:100%; padding:0;}
