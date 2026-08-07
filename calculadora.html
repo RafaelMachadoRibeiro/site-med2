@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de notas · Turma II</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="site-nav">
+    <a href="index.html">Início</a>
+    <a href="calculadora.html" class="active">Calculadora</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow"><span class="dot"></span> MEDICINA · MULTIVIX SERRA · 2º PERÍODO · MED02IA</div>
+    <h1 class="title" style="font-size:clamp(30px,6vw,48px);">Calculadora de notas</h1>
+    <p class="subtitle">Simule médias, veja o que falta pra aprovação direta e acompanhe a recuperação — eixo teórico e prático separados.</p>
+  </header>
+
+  <section id="calculadora" style="padding-top:32px;">
+    <div class="calc-rules-card">
+      <strong>Regras:</strong><br>
+      ✔ Aprovação direta: soma do 1ºB + 2ºB ≥ 14<br>
+      ✔ Recuperação: (Média do eixo + Recuperação) ÷ 2 ≥ 6,0<br>
+      ✔ Suas notas ficam salvas automaticamente neste navegador (localStorage) — não precisa reinserir a cada visita.
+    </div>
+
+    <div class="calc-toolbar">
+      <button class="calc-export-btn" onclick="calcExportarPDF()">Exportar em PDF</button>
+    </div>
+
+    <div class="calc-subjects" id="calcSubjectsContainer"></div>
+
+    <div class="calc-dep-card">
+      <h3>➕ Matérias de dependência</h3>
+      <p>Cursando alguma disciplina de dependência de outro período? Adicione quantas quiser abaixo — usam as mesmas regras de aprovação e recuperação.</p>
+      <div class="calc-dep-form">
+        <div class="calc-input-block">
+          <label>Nome da disciplina</label>
+          <input type="text" id="calcDepNameInput" placeholder="Ex: Bioquímica (Dependência)">
+        </div>
+        <label class="calc-dep-checkbox">
+          <input type="checkbox" id="calcDepHasPratica">
+          Possui eixo prático (teoria + prática)
+        </label>
+        <button class="calc-add-dep-btn" onclick="calcAddDependencia()">+ Adicionar matéria</button>
+      </div>
+    </div>
+
+    <section class="calc-pdf-report" id="calcPdfReport">
+      <div class="calc-pdf-header">
+        <div>
+          <span class="calc-pdf-kicker">MEDICINA · MULTIVIX</span>
+          <h1>Relatório de Acompanhamento de Notas · Turma II</h1>
+          <p>Calculadora de notas · MED02IA</p>
+        </div>
+        <div class="calc-pdf-rules">
+          <strong>Regras</strong>
+          <span>Aprovação direta: 14 pontos no semestre</span>
+          <span>Recuperação: (Média + Rec) ÷ 2 ≥ 6,0</span>
+        </div>
+      </div>
+      <table class="calc-pdf-table">
+        <thead>
+          <tr>
+            <th>Disciplina</th>
+            <th>Eixo</th>
+            <th>1ºB</th>
+            <th>2ºB</th>
+            <th>Precisa no 2ºB</th>
+            <th>Média</th>
+            <th>Rec.</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="calcPdfReportBody"></tbody>
+      </table>
+      <div class="calc-pdf-footer">
+        <span>Gerado pelo site da Turma II</span>
+        <span>Desenvolvido por Rafael Machado ∴</span>
+      </div>
+    </section>
+  </section>
+
+  <footer>
+    <div class="credit">Site criado por <a href="#" id="creditName">Rafael Machado</a></div>
+    <a class="ig" id="igLink" href="#" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+      Instagram
+    </a>
+  </footer>
+</div>
+
+<script src="data.js"></script>
+<script src="calculator.js"></script>
+<script>
+document.getElementById("igLink").href = IG_URL;
+document.getElementById("creditName").href = IG_URL;
+</script>
+</body>
+</html>
