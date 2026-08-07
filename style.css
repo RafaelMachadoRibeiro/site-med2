@@ -254,13 +254,11 @@ section{padding:44px 0;}
 .exams-table .exam-fase.bimestre{color:var(--trace); border-color:var(--trace-dim);}
 .exams-table .exam-fase.substitutiva{color:var(--amber); border-color:rgba(242,166,90,.35);}
 .exams-table .exam-fase.final{color:var(--danger); border-color:rgba(224,87,76,.4);}
-.exam-status-select{
-  font-family:'IBM Plex Mono',monospace; font-size:11px; background:var(--panel-2); color:var(--muted);
-  border:1px solid var(--hair); border-radius:8px; padding:6px 8px; cursor:pointer;
+.exam-status-checkbox{
+  display:flex; align-items:center; gap:7px; font-family:'IBM Plex Mono',monospace; font-size:11.5px;
+  color:var(--muted); cursor:pointer; white-space:nowrap;
 }
-.exam-status-select:focus{outline:none; border-color:var(--trace);}
-.exam-status-select.dependencia{color:var(--amber); border-color:rgba(242,166,90,.4);}
-.exam-status-select.recuperacao{color:var(--danger); border-color:rgba(224,87,76,.4);}
+.exam-status-checkbox input{width:14px; height:14px; accent-color:var(--trace); cursor:pointer;}
 
 .cal-print-card{
   background:var(--panel); border:1px solid var(--hair); border-radius:var(--radius);

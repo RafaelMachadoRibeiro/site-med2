@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  @media print{
+    @page{ size:A4 portrait; margin:14mm; }
+    .exam-calendar-print{ padding:6mm 4mm; }
+  }
+</style>
 </head>
 <body>
 
@@ -22,7 +28,7 @@
   <header>
     <div class="eyebrow"><span class="dot"></span> MEDICINA · MULTIVIX SERRA · 2º PERÍODO · MED02IA</div>
     <h1 class="title" style="font-size:clamp(30px,6vw,48px);">Calendário de provas</h1>
-    <p class="subtitle">Bimestrais, substitutivas e finais do 2º MED (2026/2). Marque abaixo o que for dependência ou recuperação sua — fica salvo só no seu navegador.</p>
+    <p class="subtitle">Bimestrais, substitutivas e finais do 2º MED (2026/2). Nas provas substitutivas e finais, marque se você vai precisar fazer — fica salvo só no seu navegador.</p>
   </header>
 
   <section id="provas" style="padding-top:32px;">
@@ -30,7 +36,7 @@
     <div class="exams-table-wrap">
       <table class="exams-table">
         <thead>
-          <tr><th>Data</th><th>Matéria</th><th>Tipo</th><th>Horário</th><th>Fase</th><th>Minha situação</th></tr>
+          <tr><th>Data</th><th>Matéria</th><th>Tipo</th><th>Horário</th><th>Fase</th><th>Vou fazer?</th></tr>
         </thead>
         <tbody id="examsBody"></tbody>
       </table>
@@ -39,7 +45,7 @@
     <div class="cal-print-card">
       <h3>🖨 Imprimir calendário</h3>
       <p>Gera um calendário (mês a mês) pronto pra imprimir ou salvar em PDF, só com as provas do filtro escolhido.
-      "Dependências" e "Recuperações" usam o que você marcou na coluna "Minha situação" acima.</p>
+      "Dependências" (substitutivas) e "Recuperações" (finais) usam o que você marcou como "Vou fazer" na tabela acima.</p>
       <div class="cal-print-buttons">
         <button class="cal-print-btn" onclick="printExamCalendar('1b')">1º Bimestre</button>
         <button class="cal-print-btn" onclick="printExamCalendar('2b')">2º Bimestre</button>
@@ -91,20 +97,19 @@ function examStatusSave(map){
   localStorage.setItem(EXAM_STATUS_KEY, JSON.stringify(map));
 }
 function examStatusGet(id){
-  return examStatusLoad()[id] || "normal";
+  return !!examStatusLoad()[id];
 }
-function examStatusOnChange(select, id){
+function examStatusToggle(checkbox, id){
   const map = examStatusLoad();
-  if(select.value === "normal") delete map[id];
-  else map[id] = select.value;
+  if(checkbox.checked) map[id] = true;
+  else delete map[id];
   examStatusSave(map);
-  select.className = "exam-status-select" + (select.value !== "normal" ? " " + select.value : "");
 }
 
-let examsFilterFase = "Todas";
+let examsFilterFase = "1º Bimestre";
 
 function renderExamsFilter(){
-  const fases = ["Todas", "1º Bimestre", "2º Bimestre", "Substitutiva", "Final"];
+  const fases = ["1º Bimestre", "2º Bimestre", "Substitutiva", "Final"];
   const el = document.getElementById("examsFilter");
   el.innerHTML = fases.map(f =>
     `<button class="${f===examsFilterFase?"active":""}" onclick="setExamsFilter('${f}')">${f}</button>`
@@ -120,10 +125,11 @@ function setExamsFilter(fase){
 function renderExams(){
   const body = document.getElementById("examsBody");
   const sorted = EXAMS.slice().sort((a,b)=> examDateToSortable(a.date).localeCompare(examDateToSortable(b.date)));
-  const filtered = examsFilterFase === "Todas" ? sorted : sorted.filter(e => e.fase === examsFilterFase);
+  const filtered = sorted.filter(e => e.fase === examsFilterFase);
   body.innerHTML = filtered.map(e => {
     const id = examId(e);
-    const status = examStatusGet(id);
+    const marcavel = e.fase === "Substitutiva" || e.fase === "Final";
+    const checked = marcavel && examStatusGet(id);
     return `
     <tr>
       <td class="exam-date">${e.date}</td>
@@ -132,11 +138,12 @@ function renderExams(){
       <td>${e.time}</td>
       <td><span class="exam-fase ${examFaseClass(e.fase)}">${e.fase}</span></td>
       <td>
-        <select class="exam-status-select${status!=='normal' ? ' '+status : ''}" onchange="examStatusOnChange(this, '${id.replace(/'/g,"\\'")}')">
-          <option value="normal" ${status==='normal'?'selected':''}>Normal</option>
-          <option value="dependencia" ${status==='dependencia'?'selected':''}>Dependência</option>
-          <option value="recuperacao" ${status==='recuperacao'?'selected':''}>Recuperação</option>
-        </select>
+        ${marcavel
+          ? `<label class="exam-status-checkbox">
+               <input type="checkbox" ${checked?'checked':''} onchange="examStatusToggle(this, '${id.replace(/'/g,"\\'")}')">
+               Vou fazer
+             </label>`
+          : `<span style="color:var(--muted);">—</span>`}
       </td>
     </tr>
   `;
@@ -199,8 +206,8 @@ function printExamCalendar(mode){
 
   if(mode === "1b"){ exams = EXAMS.filter(e=>e.fase==="1º Bimestre"); title = "1º Bimestre"; }
   else if(mode === "2b"){ exams = EXAMS.filter(e=>e.fase==="2º Bimestre"); title = "2º Bimestre"; }
-  else if(mode === "dependencia"){ exams = EXAMS.filter(e=> statusMap[examId(e)]==="dependencia"); title = "Dependências"; }
-  else if(mode === "recuperacao"){ exams = EXAMS.filter(e=> statusMap[examId(e)]==="recuperacao"); title = "Recuperações"; }
+  else if(mode === "dependencia"){ exams = EXAMS.filter(e=> e.fase==="Substitutiva" && statusMap[examId(e)]); title = "Dependências (substitutivas)"; }
+  else if(mode === "recuperacao"){ exams = EXAMS.filter(e=> e.fase==="Final" && statusMap[examId(e)]); title = "Recuperações (finais)"; }
 
   document.getElementById("calPrintTitle").textContent = `Calendário de Provas — ${title}`;
 
