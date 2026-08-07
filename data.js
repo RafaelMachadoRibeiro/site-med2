@@ -294,5 +294,4 @@ const SUBJECTS = [
   },
 ];
 
-/* TODO Rafael: troque pelo link do seu Instagram (@rafaelm.md) antes de publicar. */
-const IG_URL = "https://instagram.com/SEU_USUARIO_AQUI";
+const IG_URL = "https://instagram.com/rafaelm.md";
