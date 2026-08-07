@@ -83,7 +83,7 @@ const GROUP_OPTIONS = {
    dentro do próprio site e baixar arquivos direto, sem aparentar o Drive.
    Sem essa chave, os botões de pasta/material caem no link normal do Drive.
    Veja no README como gerar a sua chave gratuita no Google Cloud Console. */
-const DRIVE_API_KEY = "";
+const DRIVE_API_KEY = "AIzaSyBg4EQTPxhZiMfj8Y--zB1W5WfJ94o6hSc";
 
 /* Materiais por matéria (pastas do Google Drive).
    Preencha "atlas" e "thea" com os links quando tiver — por enquanto ficam como "em breve". */
