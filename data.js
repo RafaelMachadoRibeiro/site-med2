@@ -177,12 +177,14 @@ const SUBJECTS = [
     name:"Anatomia II",
     links:{
       "Slides":"https://drive.google.com/drive/folders/1uYcv4C_eOYrhnry49W3rYW9s-TKbE7cY",
+      "Pré Aula":"https://drive.google.com/drive/folders/1Qw201Kw33ikSznqtg8UoFQlHCps6kD-f",
       "Resumo":"https://drive.google.com/drive/folders/1M8qDjioakSaekXN0bainQaMUsRRhFsIc",
-      "Anotações de Aula":"https://drive.google.com/drive/folders/1-uKE90T0kJgcB7hstxjUnIK18LjLJiKI",
       "Prática":"https://drive.google.com/drive/folders/1Es2N0aTyMWzKybgRTFyC_OU2RDBS4Hsa",
+      "Anotações":"https://drive.google.com/drive/folders/1Es2N0aTyMWzKybgRTFyC_OU2RDBS4Hsa",
+      "Atlas":"https://drive.google.com/file/d/1T8AOVxn-dwkXD8yeIH6KpqHR5iSxWQKO/view",
       "Provas antigas": "https://drive.google.com/drive/folders/1Q4LfT9q2WXePC2DOHNDOnwCuYTET-mnd",
     },
-    atlas:null, thea:"https://www.thea.study/classes/16663538/copy?signature=f3b5a2e0bf09ed81422a7f80e416cb925690a2ee06f7ae50c8612006c3337dbd"
+    thea:"https://www.thea.study/classes/16663538/copy?signature=f3b5a2e0bf09ed81422a7f80e416cb925690a2ee06f7ae50c8612006c3337dbd"
   },
   {
     name:"Histologia II",
@@ -205,7 +207,7 @@ const SUBJECTS = [
       "Prática":"https://drive.google.com/drive/folders/1dYzHXfAQT8UXTKtO4sTqRSkd0euxawrI",
       "Provas antigas": "https://drive.google.com/drive/folders/1ywu1XxiOdne6jmiSgRCsCbop-YzZ7XIW",
     },
-    atlas:null, thea:"https://www.thea.study/classes/15364442/copy?signature=68e84137a918b147ca83174c8ec3a0e7514369f6e52fe19ea3cb43ec5cd18422"
+    thea:"https://www.thea.study/classes/15364442/copy?signature=68e84137a918b147ca83174c8ec3a0e7514369f6e52fe19ea3cb43ec5cd18422"
   },
   {
     name:"Imunologia",
@@ -272,6 +274,8 @@ const SUBJECTS = [
       "Slides":"https://drive.google.com/drive/folders/16KDH79ZFqK9njG0-aIuvfVaA2a_EbtQi",
       "Resumo":"https://drive.google.com/drive/folders/1_b1bXjRQDyX3x5oVCoLCMS1bB_6hGICn",
       "Prática":"https://drive.google.com/drive/folders/1_o45PXzLdwBJP99rQoky8SCjkieQSrLL",
+      "Casos": null,
+      "Anotações dos Casos": null,
       "Provas antigas": null,
     },
     thea:null
@@ -281,14 +285,6 @@ const SUBJECTS = [
     links:{
       "Slides":"https://drive.google.com/drive/folders/1TRek7OLPh3jsTwsx7TvXHWfJ-m3IK2X0",
       "Resumo":"https://drive.google.com/drive/folders/1MoELQ-e-Gyjt0nGWdSSxcdGjjMcXEmYQ",
-      "Provas antigas": null,
-    },
-    thea:null
-  },
-  {
-    name:"PIC II",
-    links:{
-      "Provas antigas": null,
     },
     thea:null
   },
