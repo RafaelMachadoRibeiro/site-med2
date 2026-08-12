@@ -215,9 +215,11 @@ function renderSubjects(){
         ? `<a class="pill" href="${s.atlas}" target="_blank" rel="noopener">Atlas</a>`
         : `<span class="pill disabled">Atlas · em breve</span>`;
     }
-    pills += s.thea
-      ? `<a class="pill" href="${s.thea}" target="_blank" rel="noopener">Thea</a>`
-      : `<span class="pill disabled">Thea · em breve</span>`;
+    if(s.hasOwnProperty("thea")){
+      pills += s.thea
+        ? `<a class="pill" href="${s.thea}" target="_blank" rel="noopener">Thea</a>`
+        : `<span class="pill disabled">Thea · em breve</span>`;
+    }
 
     card.innerHTML = `
       <h3>${s.name}</h3>

@@ -270,10 +270,9 @@ const SUBJECTS = [
   {
     name:"Casos Clínicos Integrados II",
     links:{
-      "Slides":"https://drive.google.com/drive/folders/16KDH79ZFqK9njG0-aIuvfVaA2a_EbtQi",
-      "Casos":"https://drive.google.com/drive/folders/1_o45PXzLdwBJP99rQoky8SCjkieQSrLL",
-      "Anotações dos Casos":"https://drive.google.com/drive/folders/1_b1bXjRQDyX3x5oVCoLCMS1bB_6hGICn",
-      "Provas antigas": null,
+      "Casos Clínicos":"https://drive.google.com/drive/folders/1_o45PXzLdwBJP99rQoky8SCjkieQSrLL",
+      "Anotações":"https://drive.google.com/drive/folders/1_b1bXjRQDyX3x5oVCoLCMS1bB_6hGICn",
+      "Vix":"https://drive.google.com/drive/folders/16KDH79ZFqK9njG0-aIuvfVaA2a_EbtQi",
     },
     thea:null
   },
@@ -283,7 +282,6 @@ const SUBJECTS = [
       "Slides":"https://drive.google.com/drive/folders/1TRek7OLPh3jsTwsx7TvXHWfJ-m3IK2X0",
       "Resumo":"https://drive.google.com/drive/folders/1MoELQ-e-Gyjt0nGWdSSxcdGjjMcXEmYQ",
     },
-    thea:null
   },
 ];
 
