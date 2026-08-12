@@ -271,10 +271,8 @@ const SUBJECTS = [
     name:"Casos Clínicos Integrados II",
     links:{
       "Slides":"https://drive.google.com/drive/folders/16KDH79ZFqK9njG0-aIuvfVaA2a_EbtQi",
-      "Resumo":"https://drive.google.com/drive/folders/1_b1bXjRQDyX3x5oVCoLCMS1bB_6hGICn",
-      "Prática":"https://drive.google.com/drive/folders/1_o45PXzLdwBJP99rQoky8SCjkieQSrLL",
-      "Casos": null,
-      "Anotações dos Casos": null,
+      "Casos":"https://drive.google.com/drive/folders/1_o45PXzLdwBJP99rQoky8SCjkieQSrLL",
+      "Anotações dos Casos":"https://drive.google.com/drive/folders/1_b1bXjRQDyX3x5oVCoLCMS1bB_6hGICn",
       "Provas antigas": null,
     },
     thea:null
