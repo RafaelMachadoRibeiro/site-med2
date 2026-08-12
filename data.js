@@ -256,7 +256,6 @@ const SUBJECTS = [
       "Resumo":"https://drive.google.com/drive/folders/1RX-wtNLS4bT0mPmegnLElpYXNOMNLco-",
       "Provas antigas": "https://drive.google.com/drive/folders/1FrieUBWAJqQZGGuoVI2vawXvxN19OYih",
     },
-    thea:null
   },
   {
     name:"APS II",
