@@ -179,9 +179,8 @@ const SUBJECTS = [
       "Slides":"https://drive.google.com/drive/folders/1uYcv4C_eOYrhnry49W3rYW9s-TKbE7cY",
       "Pré Aula":"https://drive.google.com/drive/folders/1Qw201Kw33ikSznqtg8UoFQlHCps6kD-f",
       "Resumo":"https://drive.google.com/drive/folders/1M8qDjioakSaekXN0bainQaMUsRRhFsIc",
-      "Prática":"https://drive.google.com/drive/folders/1Es2N0aTyMWzKybgRTFyC_OU2RDBS4Hsa",
-      "Anotações":"https://drive.google.com/drive/folders/1Es2N0aTyMWzKybgRTFyC_OU2RDBS4Hsa",
-      "Atlas":"https://drive.google.com/file/d/1T8AOVxn-dwkXD8yeIH6KpqHR5iSxWQKO/view",
+      "Anotações":"https://drive.google.com/drive/folders/1JmpK8Sk8NPbomPLSp9sBH-o8ADLQX1eM",
+      "Atlas":"https://drive.google.com/drive/folders/1dtvoHtAnc83HsQ-4E597iPEs664j08HZ",
       "Provas antigas": "https://drive.google.com/drive/folders/1Q4LfT9q2WXePC2DOHNDOnwCuYTET-mnd",
     },
     thea:"https://www.thea.study/classes/16663538/copy?signature=f3b5a2e0bf09ed81422a7f80e416cb925690a2ee06f7ae50c8612006c3337dbd"
