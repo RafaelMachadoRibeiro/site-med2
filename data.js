@@ -191,10 +191,11 @@ const SUBJECTS = [
       "Slides":"https://drive.google.com/drive/folders/1Ke2NAXbznjvGQK7L7KZXQ0i0QHWCIe4P",
       "Resumo":"https://drive.google.com/drive/folders/14xXX5PTvG5nqrWSRo0Kl437zdsmN4y03",
       "Anotações de Aula":"https://drive.google.com/drive/folders/1l8TQcBTF6Gfrccis5IZROqQ5itpfIEqd",
-      "Prática":"https://drive.google.com/drive/folders/1ib9sv6KZd6_9HY0rgm_VcZx-VF_BQyWd",
+      "Atlas":"https://drive.google.com/drive/folders/1HhZMTfJAOyToDV-sNHiVCqZGHS7gJKk7",
+      "Lâminas":"https://drive.google.com/drive/folders/1Ifmw8lQkrJ5HBHs0P6N7zJZEGg4kGPDh",
       "Provas antigas": "https://drive.google.com/drive/folders/1IbWRPnMXRQ-vLd2EjgmnwJbgTYfjXAXr",
     },
-    atlas:null, thea:"https://www.thea.study/classes/16645150/copy?signature=ae6b955365ca7445b24492c67677bd38d1872ff1fabb135931e97ed674290b4c"
+    thea:"https://www.thea.study/classes/16645150/copy?signature=ae6b955365ca7445b24492c67677bd38d1872ff1fabb135931e97ed674290b4c"
   },
   {
     name:"Semiologia II",
@@ -274,7 +275,6 @@ const SUBJECTS = [
       "Anotações":"https://drive.google.com/drive/folders/1_b1bXjRQDyX3x5oVCoLCMS1bB_6hGICn",
       "Vix":"https://drive.google.com/drive/folders/16KDH79ZFqK9njG0-aIuvfVaA2a_EbtQi",
     },
-    thea:null
   },
   {
     name:"Humanidades II",
