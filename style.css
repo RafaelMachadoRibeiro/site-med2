@@ -276,17 +276,21 @@ section{padding:44px 0;}
 
 .exam-calendar-print{display:none;}
 @media print{
-  .exam-calendar-print{display:block !important;}
-  .cal-month{page-break-after:always;}
+  html, body{width:297mm; height:210mm;}
+  .exam-calendar-print{display:block !important; width:100%;}
+  .cal-month{page-break-after:always; display:flex; flex-direction:column; height:182mm;}
   .cal-month:last-child{page-break-after:auto;}
-  .cal-month h2{font-size:16px; margin-bottom:8px; color:#111827; font-family:'Space Grotesk',sans-serif;}
-  .cal-print-title{font-size:11px; font-weight:800; letter-spacing:1.2px; color:#0a58ca; margin-bottom:2px;}
-  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:#d7dde5; border:1px solid #d7dde5;}
-  .cal-dow{text-align:center; font-weight:700; padding:5px; background:#0a58ca; color:#fff; font-size:9px; text-transform:uppercase; letter-spacing:.3px;}
-  .cal-day{min-height:76px; background:#fff; padding:4px; font-size:8px; color:#111827;}
+  .cal-month h2{font-size:22px; margin-bottom:5mm; color:#111827; font-family:'Space Grotesk',sans-serif;}
+  .cal-print-title{font-size:14px; font-weight:800; letter-spacing:1.2px; color:#0a58ca; margin-bottom:3px;}
+  .cal-grid{
+    display:grid; grid-template-columns:repeat(7,1fr); grid-template-rows:auto repeat(6,1fr);
+    gap:1.5px; background:#d7dde5; border:1px solid #d7dde5; flex:1;
+  }
+  .cal-dow{display:flex; align-items:center; justify-content:center; font-weight:700; background:#0a58ca; color:#fff; font-size:13px; text-transform:uppercase; letter-spacing:.3px;}
+  .cal-day{background:#fff; padding:2mm; font-size:11px; color:#111827; overflow:hidden;}
   .cal-day.empty{background:#f8fafc;}
-  .cal-daynum{font-weight:700; font-size:10.5px; color:#111827;}
-  .cal-exam{margin-top:3px; padding:2px 3px; background:#eef2ff; border-radius:3px; font-size:7.3px; line-height:1.25; color:#1e3a8a;}
+  .cal-daynum{font-weight:700; font-size:16px; color:#111827;}
+  .cal-exam{margin-top:2mm; padding:1.5mm 2mm; background:#eef2ff; border-radius:3px; font-size:10px; line-height:1.3; color:#1e3a8a;}
 }
 
 /* ---------- DRIVE MODAL (navegador de pastas embutido) ---------- */
